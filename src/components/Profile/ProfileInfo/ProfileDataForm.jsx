@@ -7,7 +7,7 @@ import {createField, Input, Textarea} from "../../common/FormControls/FormContro
 const ProfileDataForm = ({handleSubmit, error, profile }) => {
     return (
         <form onSubmit={handleSubmit}>
-            <div><button onClick={() => {}}>save</button></div>
+            <div><button>save</button></div>
             { error && <div className={s.formSummaryError}>{error}</div> }
             <div>
                 <div className={style.userName}><b>Full Name</b>{createField('Full Name', 'fullName', [], Input)}</div>

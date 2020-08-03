@@ -34,9 +34,15 @@ const ProfileInfo = ({profile, status, updateStatus, isOwner, savePhoto, savePro
             <div className={s.discriptionBlock}>
                 <img className={styles.smallAva}
                      src={profile.photos.small != null ? profile.photos.small : userPhoto}/>
+
                 {isOwner && <div><input type={'file'} onChange={onMainPhotoSelect} /></div> }
+
                 <ProfileStatusWithHooks status={status} updateStatus={updateStatus}/>
+
                 {editMode
+                    //initialValues={profile}  cтартовые инициализованые (начальные) значения
+                    //что б в placeholder были значения из profile если они там есть, если нет то те placeholder
+                    //которые мы прописали в src/components/Profile/ProfileInfo/ProfileDataForm.jsx
                     ? <ProfileDataReduxForm initialValues={profile} onSubmit={onSubmit} profile={profile}/>
                     : <ProfileData profile={profile} isOwner={isOwner} goToEditMode={ () => {setEditMode(true)} }/>
                 }
