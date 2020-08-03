@@ -2,11 +2,11 @@ import React from 'react';
 import Profile from "./Profile";
 import {connect} from 'react-redux';
 import {withRouter} from "react-router-dom";
-import {getProfile, getStatus, updateStatus} from "../../redux/profile-reducer";
+import {getProfile, getStatus, savePhoto, updateStatus, saveProfile} from "../../redux/profile-reducer";
 import {compose} from "redux";
 
 class ProfileContainer extends React.Component {
-    componentDidMount() {
+    refreshProfile() {
         //userId выбранного юзера
         let userId = this.props.match.params.userId;
         //если userId не выбран
@@ -23,13 +23,25 @@ class ProfileContainer extends React.Component {
 
         this.props.getStatus(userId)
     }
+    componentDidMount() {
+        this.refreshProfile()
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if(this.props.match.params.userId !== prevProps.match.params.userId) {
+            this.refreshProfile()
+        }
+    }
 
     render () {
         return (
             <Profile { ...this.props}
+                     isOwner={!this.props.match.params.userId}
                      profile={this.props.profile}
                      status={this.props.status}
-                     updateStatus={this.props.updateStatus}/>
+                     updateStatus={this.props.updateStatus}
+                     savePhoto={this.props.savePhoto}
+                     saveProfile={this.props.saveProfile}/>
         )
     }
 }
@@ -38,7 +50,7 @@ let mapStateToProps = (state) => ({
     profile: state.profilePage.profile,
     status: state.profilePage.status,
     autorizedUserId: state.auth.userId,
-    isAuth: state.auth.isAuth,
+    isAuth: state.auth.isAuth
 })
 //------------------- вмето этого вссего используем compose ------------------
 // // hoc - что б переходить на страницу взяв данные из урла
@@ -55,6 +67,6 @@ let mapStateToProps = (state) => ({
 // export default connect(mapStateToProps, {getProfile})(AuthRedirectComponent);
 //------------------- вмето этого вссего используем compose ------------------
 export default compose(
-    connect(mapStateToProps, {getProfile, getStatus, updateStatus}),
+    connect(mapStateToProps, {getProfile, getStatus, updateStatus, savePhoto, saveProfile}),
     withRouter
 )(ProfileContainer)

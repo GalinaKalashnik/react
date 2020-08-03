@@ -43,9 +43,9 @@ class App extends Component {
                 {/*? знак в конце говорит что параметр не обязателен и */}
                 {/*если он не передн то показываем свой профиль*/}
                 <Route path='/profile/:userId?'
-                       render={() => {withSuspense(ProfileContainer)}}/>
+                       render={withSuspense(ProfileContainer)}/>
                 <Route path='/dialogs'
-                       render={() => {withSuspense(DialogsContainer)}}/>
+                       render={withSuspense(DialogsContainer)}/>
                 <Route path='/users'
                        render={() => <UsersContainer /> }/>
                 <Route path='/news' render={() => <News/>}/>

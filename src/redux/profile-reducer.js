@@ -1,9 +1,11 @@
 import {profileAPI} from "../api/api";
+import {stopSubmit} from "redux-form";
 
 const ADD_POST = 'ADD-POST';
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
 const SET_STATUS = 'SET_STATUS';
 const DELETE_POST = 'DELETE_POST'
+const SAVE_PHOTO_SUCCESS = 'SAVE_PHOTO_SUCCESS'
 
 let initialState = {
     posts: [
@@ -34,6 +36,9 @@ const profileReducer = (state = initialState, action) => {
             return {...state, status: action.status};
         case SET_USER_PROFILE:
             return {...state, profile: action.profile};
+        case SAVE_PHOTO_SUCCESS:
+            debugger
+            return {...state, profile: {...state.profile, photos: action.photos}};
         default:
             return state;
     }
@@ -43,6 +48,7 @@ export const addPostActionCreator = (newPostText) => ({type: ADD_POST, newPostTe
 export const setUserProfile = (profile) => ({type: SET_USER_PROFILE, profile})
 export const setStatus = (status) => ({type: SET_STATUS, status})
 export const deletePost = (postId) => ({type: DELETE_POST, postId})
+export const savePhotoSuccess = (photos) => ({type: SAVE_PHOTO_SUCCESS, photos})
 
 export const getProfile = (userId) => async (dispatch) => {
     let response = await profileAPI.getProfile(userId)
@@ -61,6 +67,33 @@ export const updateStatus = (status) => async (dispatch) => {
     }
 }
 
+export const savePhoto = (file) => async (dispatch) => {
+    let response = await  profileAPI.savePhoto(file)
+    if(response.data.resultCode === 0) {
+        dispatch(savePhotoSuccess(response.data.data.photos));
+    }
+}
 
+export const saveProfile = (profile) => async (dispatch, getState) => {
+    const userId = getState().auth.userId;
+    const response = await  profileAPI.saveProfile(profile)
+    if(response.data.resultCode === 0) {
+        dispatch(getProfile(userId));
+    }else {
+        //stopSubmit() - это aсtionCreater из redux-form библиотеки
+        //'edit-profile' - название формы кот надо остановить если ошибка
+
+        //_error - это общая ошибка для всей формы, если хоть что то заполнено неверно,
+        // так же можно указывать какое то конкретное поле используя его name
+        dispatch(stopSubmit('edit-profile', {_error: response.data.messages[0] }));
+        //это для того что б ы в src/components/Profile/ProfileInfo/ProfileInfo.jsx в const onSubmit = (formData) => {
+        //использовать
+        //.then(() => {
+        //             setEditMode(false)
+        //             })
+        //что  еловить момен если ошибка
+        return Promise.reject(response.data.messages[0])
+    }
+}
 
 export default profileReducer;
