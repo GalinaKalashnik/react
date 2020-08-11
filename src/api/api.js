@@ -1,5 +1,4 @@
 import * as axios from 'axios';
-import {setSecurityData} from "../redux/auth-reducer";
 
 //настройка axios с помощью axios.create что б разгрузить код
 // вместо к примеру
@@ -15,7 +14,7 @@ const instance = axios.create({
 
     baseURL: 'https://social-network.samuraijs.com/api/1.0/',
     headers: {
-        "API-KEY" : "f0275849-35c1-4efb-9711-7874097a02ad"
+        "API-KEY" : "7c81b571-c054-47d9-a903-f46763387bcd"
     }
 })
 

@@ -1,5 +1,5 @@
 import React, {Component, Suspense} from 'react';
-import {BrowserRouter, Route, withRouter} from "react-router-dom";
+import {BrowserRouter, Route, withRouter, Switch, Redirect} from "react-router-dom";
 import './App.css';
 import HeaderContainer from "./components/Header/HeaderContainer";
 import Navbar from "./components/Navbar/Navbar";
@@ -28,8 +28,18 @@ const ProfileContainer = React.lazy(() => import("./components/Profile/ProfileCo
 
 
 class App extends Component {
+
+    catchAllUnhandledErrors = (e) => {
+        alert(e.reason)
+    }
+
     componentDidMount() {
         this.props.initializeApp();
+        window.addEventListener('unhandledrejection', this.catchAllUnhandledErrors)
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('unhandledrejection', this.catchAllUnhandledErrors)
     }
 
     render () {
@@ -40,18 +50,29 @@ class App extends Component {
             <HeaderContainer />
             <Navbar/>
             <div className='app-wrapper-content'>
-                {/*? знак в конце говорит что параметр не обязателен и */}
-                {/*если он не передн то показываем свой профиль*/}
-                <Route path='/profile/:userId?'
-                       render={withSuspense(ProfileContainer)}/>
-                <Route path='/dialogs'
-                       render={withSuspense(DialogsContainer)}/>
-                <Route path='/users'
-                       render={() => <UsersContainer /> }/>
-                <Route path='/news' render={() => <News/>}/>
-                <Route path='/music' render={() => <Music/>}/>
-                <Route path='/settings' render={() => <Settings/>}/>
-                <Route path='/login' render={() => <Login />}/>
+                {/*Switch нужен что б если есть*/}
+                {/*path='/login/facebook'*/}
+                {/*path='/login' без Switch на странице '/login/facebook' отображались бы и она и '/login'*/}
+                {/*а так оннаходит удволитворяющий его роут и уже дальше не идет*/}
+                <Switch>
+                    {/*exac - задает чтоб показывать эту страницу есть url точь в точь */}
+                    <Route exact path='/'
+                           render={() => <Redirect to={"/profile"} />}/>
+                    {/*? знак в конце говорит что параметр не обязателен и */}
+                    {/*если он не передн то показываем свой профиль*/}
+                    <Route path='/profile/:userId?'
+                           render={withSuspense(ProfileContainer)}/>
+                    <Route path='/dialogs'
+                           render={withSuspense(DialogsContainer)}/>
+                    <Route path='/users'
+                           render={() => <UsersContainer /> }/>
+                    <Route path='/news' render={() => <News/>}/>
+                    <Route path='/music' render={() => <Music/>}/>
+                    <Route path='/settings' render={() => <Settings/>}/>
+                    <Route path='/login/facebook' render={() => <div>login facebook</div>}/>
+                    <Route path='/login' render={() => <Login />}/>
+                    <Route path='*' render={() => <div>404 not found</div>}/>
+                </Switch>
             </div>
         </div>
     }

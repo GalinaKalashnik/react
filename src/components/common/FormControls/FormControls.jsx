@@ -1,7 +1,6 @@
 import React from 'react';
 import s from './FormControls.module.css';
 import {Field} from "redux-form";
-import {required} from "../../../utils/validators/validators";
 
 //с помощью деструктуриззации зкщзы разбиваем на input, meta, ...props
 // {input, meta, ...props} - рест  оператор, таким образом из props мы исключаем input, meta и в props будут
