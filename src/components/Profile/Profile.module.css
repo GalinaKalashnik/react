@@ -1,3 +1,4 @@
-.item {
-    color: greenyellow;
+.content {
+    grid-area: c;
+    background-color: cornflowerblue;
 }
