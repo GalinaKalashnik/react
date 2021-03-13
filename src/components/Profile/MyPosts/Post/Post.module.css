@@ -1,8 +1,8 @@
-.posts {
+.item {
     margin-top: 20px;
 }
-
-.posts img {
+.item img {
     max-width: 30px;
+    max-height: 30px;
     border-radius: 50%;
 }
