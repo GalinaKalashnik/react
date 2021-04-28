@@ -4,9 +4,12 @@ import * as serviceWorker from './serviceWorker';
 import './index.css';
 import MainApp from "./App";
 import state from "./redux/state"
+import {BrowserRouter} from "react-router-dom";
 
 ReactDOM.render(
-        <MainApp state={state} />,
+    <BrowserRouter>
+        <MainApp state={state}/>
+    </BrowserRouter>,
     document.getElementById('root')
 );
 
