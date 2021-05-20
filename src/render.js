@@ -5,12 +5,13 @@ import './index.css';
 import MainApp from "./App";
 
 import {addPost} from "./redux/state";
+import {updateNewPostText} from "./redux/state";
 import {BrowserRouter} from "react-router-dom";
 
 export let renderEntireTree = (state) => {
     ReactDOM.render(
         <BrowserRouter>
-            <MainApp state={state} addPost={addPost}/>
+            <MainApp state={state} addPost={addPost} updateNewPostText={updateNewPostText} />
         </BrowserRouter>,
         document.getElementById('root')
     );
